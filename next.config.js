@@ -3,8 +3,16 @@
  * for Docker builds.
  */
 import "./src/env.js";
+import "reflect-metadata";
+
 
 /** @type {import("next").NextConfig} */
-const config = {};
+const config = {
+    experimental: {
+        serverActions: {
+            bodySizeLimit: "10mb",
+        }
+    },
+};
 
 export default config;

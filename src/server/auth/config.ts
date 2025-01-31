@@ -1,6 +1,9 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { type DefaultSession, type NextAuthConfig } from "next-auth";
 import DiscordProvider from "next-auth/providers/discord";
+import { TypeORMAdapter } from "@auth/typeorm-adapter"
+import * as entities from "~/lib/entities"
+
 
 import { db } from "~/server/db";
 
@@ -25,6 +28,7 @@ declare module "next-auth" {
   // }
 }
 
+
 /**
  * Options for NextAuth.js used to configure adapters, providers, callbacks, etc.
  *
@@ -43,7 +47,9 @@ export const authConfig = {
      * @see https://next-auth.js.org/providers/github
      */
   ],
-  adapter: PrismaAdapter(db),
+
+
+  adapter: TypeORMAdapter(`mssql://sa:security@10.0.0.83\mssql:1433`, { entities }),
   callbacks: {
     session: ({ session, user }) => ({
       ...session,
