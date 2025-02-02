@@ -1,11 +1,9 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import { type DefaultSession, type NextAuthConfig } from "next-auth";
+import NextAuth, { type DefaultSession, type NextAuthConfig } from "next-auth";
 import DiscordProvider from "next-auth/providers/discord";
 import { TypeORMAdapter } from "@auth/typeorm-adapter"
-import * as entities from "~/lib/entities"
-
-
-import { db } from "~/server/db";
+import {AppDataSourceOptions, AppDataSource} from "~/server/data-source";
+import CredentialsProvider from "next-auth/providers/credentials";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -33,23 +31,45 @@ declare module "next-auth" {
  * Options for NextAuth.js used to configure adapters, providers, callbacks, etc.
  *
  * @see https://next-auth.js.org/configuration/options
+ * 
  */
-export const authConfig = {
+
+
+export const authOptions = {
+  adapter: TypeORMAdapter(AppDataSourceOptions),
+  // TODO: Remove debug
+  debug: true,
   providers: [
-    // DiscordProvider,
-    /**
-     * ...add more providers here.
-     *
-     * Most other providers require a bit more work than the Discord provider. For example, the
-     * GitHub provider requires you to add the `refresh_token_expires_in` field to the Account
-     * model. Refer to the NextAuth.js docs for the provider you want to use. Example:
-     *
-     * @see https://next-auth.js.org/providers/github
-     */
+    CredentialsProvider({
+      name: "Credentials",
+      credentials: {
+        username: { label: "Username", type: "text" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials) {
+        const { username, password } = credentials as { username: string; password: string };
+
+        // Query your database to find the user
+        const userRepo = AppDataSource.getRepository("users");
+        const accountRepo = AppDataSource.getRepository("accounts");
+        const user = await userRepo.findOne({ where: { username } });
+        const account = await accountRepo.findOne({ where: { userId: user?.id } });
+
+        if (!user) {
+          throw new Error("User not found");
+        }
+
+        // Validate password (use bcrypt if hashed)
+        if (password !== account?.password) {
+          throw new Error("Invalid password");
+        }
+
+        return { id: user.id, name: user.name, username: user.username };
+      },
+    }),
   ],
 
 
-  adapter: TypeORMAdapter(`mssql://sa:security@10.0.0.83\mssql:1433`, { entities }),
   callbacks: {
     session: ({ session, user }) => ({
       ...session,

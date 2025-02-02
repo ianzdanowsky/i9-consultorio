@@ -9,7 +9,7 @@ import { Label } from "~/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "~/components/ui/card"
 
 export default function LoginPageClient() {
-  const [username, setUsername] = useState("")
+  const [email, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
   const router = useRouter()
@@ -19,11 +19,10 @@ export default function LoginPageClient() {
     setError("")
 
     const result = await signIn("credentials", {
-      username,
+      email,
       password,
       redirect: false, // Prevent automatic redirection, so we can handle errors
-      callbackUrl: "/assistant"
-    })  
+    })
 
     if (result?.error) {
       setError("Invalid username or password")
@@ -47,7 +46,7 @@ export default function LoginPageClient() {
                 id="username"
                 type="text"
                 placeholder="your username"
-                value={username}
+                value={email}
                 onChange={(e) => setUsername(e.target.value)}
                 required
               />

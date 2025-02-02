@@ -4,9 +4,9 @@ import {
   Column,
   ManyToOne,
   OneToMany,
-  ValueTransformer,
-} from "typeorm";
-
+  type ValueTransformer,
+} from "typeorm"
+ 
 const transformer: Record<"date" | "bigint", ValueTransformer> = {
   date: {
     from: (date: string | null) => date && new Date(parseInt(date, 10)),
@@ -16,118 +16,121 @@ const transformer: Record<"date" | "bigint", ValueTransformer> = {
     from: (bigInt: string | null) => bigInt && parseInt(bigInt, 10),
     to: (bigInt?: number) => bigInt?.toString(),
   },
-};
-
+}
+ 
 @Entity({ name: "users" })
 export class UserEntity {
   @PrimaryGeneratedColumn("uuid")
-  id!: string;
-
+  id!: string
+ 
   @Column({ type: "varchar", nullable: true })
-  name!: string | null;
-
+  name!: string | null
+ 
   @Column({ type: "varchar", nullable: true, unique: true })
-  email!: string | null;
-
+  email!: string | null
+ 
   @Column({ type: "varchar", nullable: true, transformer: transformer.date })
-  emailVerified!: string | null;
-
+  emailVerified!: string | null
+ 
   @Column({ type: "varchar", nullable: true })
-  image!: string | null;
-
+  image!: string | null
+  
   @Column({ type: "varchar", nullable: true })
-  role!: string | null;
-
+  role!: string | null
+ 
   @OneToMany(() => SessionEntity, (session) => session.userId)
-  sessions!: SessionEntity[];
-
+  sessions!: SessionEntity[]
+ 
   @OneToMany(() => AccountEntity, (account) => account.userId)
-  accounts!: AccountEntity[];
+  accounts!: AccountEntity[]
 }
-
+ 
 @Entity({ name: "accounts" })
 export class AccountEntity {
   @PrimaryGeneratedColumn("uuid")
-  id!: string;
-
+  id!: string
+ 
   @Column({ type: "uuid" })
-  userId!: string;
-
+  userId!: string
+ 
   @Column()
-  type!: string;
-
+  type!: string
+ 
   @Column()
-  provider!: string;
-
+  provider!: string
+ 
   @Column()
-  providerAccountId!: string;
-
+  providerAccountId!: string
+ 
   @Column({ type: "varchar", nullable: true })
-  refresh_token!: string | null;
-
+  refresh_token!: string | null
+ 
   @Column({ type: "varchar", nullable: true })
-  access_token!: string | null;
-
+  access_token!: string | null
+ 
   @Column({
     nullable: true,
     type: "bigint",
     transformer: transformer.bigint,
   })
-  expires_at!: number | null;
+  expires_at!: number | null
+ 
+  @Column({ type: "varchar", nullable: true })
+  token_type!: string | null
+ 
+  @Column({ type: "varchar", nullable: true })
+  scope!: string | null
+ 
+  @Column({ type: "varchar", nullable: true })
+  id_token!: string | null
+ 
+  @Column({ type: "varchar", nullable: true })
+  session_state!: string | null
+ 
+  @Column({ type: "varchar", nullable: true })
+  oauth_token_secret!: string | null
+ 
+  @Column({ type: "varchar", nullable: true })
+  oauth_token!: string | null
 
   @Column({ type: "varchar", nullable: true })
-  token_type!: string | null;
-
-  @Column({ type: "varchar", nullable: true })
-  scope!: string | null;
-
-  @Column({ type: "varchar", nullable: true })
-  id_token!: string | null;
-
-  @Column({ type: "varchar", nullable: true })
-  session_state!: string | null;
-
-  @Column({ type: "varchar", nullable: true })
-  oauth_token_secret!: string | null;
-
-  @Column({ type: "varchar", nullable: true })
-  oauth_token!: string | null;
-
+  password!: string | null
+ 
   @ManyToOne(() => UserEntity, (user) => user.accounts, {
     createForeignKeyConstraints: true,
   })
-  user!: UserEntity;
+  user!: UserEntity
 }
-
+ 
 @Entity({ name: "sessions" })
 export class SessionEntity {
   @PrimaryGeneratedColumn("uuid")
-  id!: string;
-
+  id!: string
+ 
   @Column({ unique: true })
-  sessionToken!: string;
-
+  sessionToken!: string
+ 
   @Column({ type: "uuid" })
-  userId!: string;
-
+  userId!: string
+ 
   @Column({ transformer: transformer.date })
-  expires!: string;
-
+  expires!: string
+ 
   @ManyToOne(() => UserEntity, (user) => user.sessions)
-  user!: UserEntity;
+  user!: UserEntity
 }
-
+ 
 @Entity({ name: "verification_tokens" })
 export class VerificationTokenEntity {
   @PrimaryGeneratedColumn("uuid")
-  id!: string;
-
+  id!: string
+ 
   @Column()
-  token!: string;
-
+  token!: string
+ 
   @Column()
-  identifier!: string;
-
+  identifier!: string
+ 
   @Column({ transformer: transformer.date })
-  expires!: string;
+  expires!: string
 }
