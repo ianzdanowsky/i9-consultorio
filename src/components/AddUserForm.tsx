@@ -2,11 +2,11 @@ import { useState } from "react"
 import { Input } from "~/components/ui/input"
 import { Button } from "~/components/ui/button"
 import { Label } from "~/components/ui/label"
-import { addUser, type User } from "~/lib/api"
+import { addPaciente, type Paciente } from "~/lib/matendimento"
 import type React from "react" // Added import for React
 
 interface AddUserFormProps {
-  onUserAdded: (user: User) => void
+  onUserAdded: (user: Paciente) => void
 }
 
 export function AddUserForm({ onUserAdded }: AddUserFormProps) {
@@ -16,7 +16,7 @@ export function AddUserForm({ onUserAdded }: AddUserFormProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    const newUser = await addUser({ name, email, metadata })
+    const newUser = await addPaciente({ name, email, metadata })
     onUserAdded(newUser)
     setName("")
     setEmail("")
