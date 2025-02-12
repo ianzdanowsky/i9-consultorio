@@ -1,12 +1,12 @@
-import { useEffect } from "react"
 import { useZxing } from "react-zxing"
+import { X } from "lucide-react"
 
 interface BarcodeScannerProps {
   onResult: (result: string) => void
-  // onClose: () => void
+  onClose: () => void
 }
 
-export function BarcodeScanner({ onResult }: BarcodeScannerProps) {
+export function BarcodeScanner({ onResult, onClose }: BarcodeScannerProps) {
   const { ref } = useZxing({
     onDecodeResult(result) {
       onResult(result['text'])
@@ -14,27 +14,17 @@ export function BarcodeScanner({ onResult }: BarcodeScannerProps) {
     },
   })
 
-  // useEffect(() => {
-  //   const handleKeyDown = (event: KeyboardEvent) => {
-  //     if (event.key === "Escape") {
-  //       onClose()
-  //     }
-  //   }
-
-  //   window.addEventListener("keydown", handleKeyDown)
-  //   return () => window.removeEventListener("keydown", handleKeyDown)
-  // }, [onClose])
-
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-      <div className="bg-white p-4 rounded-lg">
-        <h2 className="text-xl font-bold mb-4">Scan Barcode</h2>
-        <video ref={ref} className="w-full max-w-md" />
-        {/* <button onClick={onClose} className="mt-4 px-4 py-2 bg-red-500 text-white rounded">
-          Close Scanner
-        </button> */}
+      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md relative">
+        {/* Close Button */}
+        <button onClick={onClose} className="absolute top-2 right-2 text-gray-500 hover:text-gray-700">
+          <X className="h-6 w-6" />
+        </button>
+
+        <h2 className="text-xl font-bold text-center mb-4">Escaneie o Código</h2>
+        <video ref={ref} className="w-full rounded-lg shadow-sm" />
       </div>
     </div>
   )
 }
-

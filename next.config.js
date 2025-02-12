@@ -8,7 +8,7 @@ import "./src/env.js";
 const config = {
     experimental: {
         serverActions: {
-            bodySizeLimit: "10mb",
+            bodySizeLimit: "100mb",
         }
     },
 };

@@ -5,13 +5,15 @@ import { SearchForm } from "~/components/SearchForm"
 import { UserList } from "~/components/UserList"
 import { BarcodeScanner } from "~/components/Barcodescanner"
 import { searchPacientes, getPacienteByBarcode, getAllPacientes, type Paciente } from "~/lib/matendimento"
+import getPacients from "./actions"
+import LogoutButton from "~/components/LogoutButton"
 
 export default function Home() {
   const [users, setUsers] = useState<Paciente[]>([])
-  const [barcodeString, setBarcodeString ] = useState("")
+  const [barcodeString, setBarcodeString] = useState("")
   const [searchResults, setSearchResults] = useState<Paciente[]>([])
   const [isScanning, setIsScanning] = useState(false)
-  const [isUserListVisible, setIsUserListVisible] = useState(false) // Começa oculto
+  const [isUserListVisible, setIsUserListVisible] = useState(false)
 
   useEffect(() => {
     void fetchAllUsers()
@@ -20,12 +22,12 @@ export default function Home() {
   const fetchAllUsers = async () => {
     const allUsers = await getAllPacientes()
     setUsers(allUsers)
-    setIsUserListVisible(true) // Exibe a lista após a busca
+    setIsUserListVisible(true)
   }
 
   const handleSearch = async (query: string) => {
     console.log(query)
-    const results = await searchPacientes(query)
+    const results = await getPacients(query)
     setSearchResults(results)
   }
 
@@ -36,43 +38,32 @@ export default function Home() {
   const handleBarcodeResult = async (result: string) => {
     setBarcodeString(result)
     setIsScanning(false)
-    const user = await getPacienteByBarcode(result)
-    if (user) {
-      setSearchResults([user])
-    } else {
-      setSearchResults([])
-    }
-  }
-
-  const handleUserAdded = (newUser: Paciente) => {
-    setUsers([...users, newUser])
   }
 
   return (
-    <main className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Pesquisa Atendimentos:</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div>
-          <h2 className="text-xl font-semibold mb-4">Pacientes:</h2>
+    <div className="flex flex-col h-screen bg-gray-100 p-4">
+      <main className="flex flex-col flex-1 max-w-lg mx-auto bg-white shadow-md rounded-lg p-6 w-full">
+      <div className="flex justify-center mb-4">
+          <LogoutButton />
+        </div>
+        {/* Header */}
+        <h1 className="text-2xl font-bold text-center text-gray-900 mb-4">Pesquisa de Pacientes</h1>
 
-
+        {/* Search Form */}
+        <div className="mb-4 p-3 bg-blue-100 border border-blue-300 rounded-lg shadow-sm">
           <SearchForm searchText={barcodeString} onSearch={handleSearch} onScanBarcode={handleScanBarcode} />
+        </div>
 
-		      {isUserListVisible && (
-          <div className="mt-4">
+        {/* User List */}
+        {isUserListVisible && (
+          <div className="w-full">
             <UserList users={searchResults} />
           </div>
-		      )}
-        </div>
-
-        {isUserListVisible && (
-        <div>
-          <h2 className="text-xl font-semibold mb-4"></h2>
-        </div>
         )}
-      </div>
-	  
-      {isScanning && <BarcodeScanner onResult={handleBarcodeResult} />}
-    </main>
+
+        {/* Barcode Scanner */}
+        {isScanning && <BarcodeScanner onResult={handleBarcodeResult} onClose={() => setIsScanning(false)} />}
+      </main>
+    </div>
   )
 }
