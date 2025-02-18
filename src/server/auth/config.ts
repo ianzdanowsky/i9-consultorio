@@ -60,6 +60,8 @@ export const authOptions = {
           throw new Error("User not found");
         }
 
+        console.log('Account: ', account);
+
         // Validate password
         if (password !== account?.senha) {
           throw new Error("Invalid password");
