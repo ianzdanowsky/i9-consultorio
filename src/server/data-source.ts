@@ -5,11 +5,11 @@ import * as entities from "~/lib/entities";
 
 export const AppDataSourceOptions: DataSourceOptions = {
     type: "mssql",
-    host: "10.0.0.83",
+    host: process.env.DB_SERVER,
     port: 1433,
-    username: "sa",
-    password: "security",
-    database: "i9dados",
+    username: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
     entities: entities,
     synchronize: false,
     logging: true,
