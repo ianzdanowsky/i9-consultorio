@@ -1,6 +1,6 @@
-import sql from "mssql"
+import sql, { config } from "mssql"
 
-const config = {
+const dbconfig = {
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   server: process.env.DB_SERVER,
@@ -13,7 +13,7 @@ const config = {
 
 export async function connectDB() {
   try {
-    const pool = await sql.connect(config)
+    const pool = await sql.connect(dbconfig as config)
     return pool
   } catch (err) {
     console.error("Erro ao conectar ao banco de dados:", err)

@@ -6,7 +6,7 @@ import { signIn } from "next-auth/react"
 import { Button } from "~/components/ui/button"
 import { Input } from "~/components/ui/input"
 import { Label } from "~/components/ui/label"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "~/components/ui/card"
+import { CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "~/components/ui/card"
 
 export default function LoginPageClient() {
   const [email, setEmail] = useState("")
@@ -19,10 +19,12 @@ export default function LoginPageClient() {
     setError("")
 
     const result = await signIn("credentials", {
-      email,
-      password,
+      email: email,
+      password: password,
       redirect: false, // Impede a redireção automática para tratamento de erro
     })
+
+    console.log(result)
 
     if (result?.error) {
       setError("Usuário ou senha inválidos")

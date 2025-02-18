@@ -1,10 +1,13 @@
 "use server"
 
+import { type ConnectionPool } from "mssql";
 import { connectDB } from "~/lib/db"
+import { type paciente } from "~/interfaces/pacientes";
+
 
 export default async function getPacients(barcode_search_string: string) {
   try {
-    const pool = await connectDB();
+    const pool = await connectDB() as unknown as ConnectionPool;
     let query = `
       SELECT MATENDIMENTO.ID AS ID, 
              CPACIENTE.NOME + ' - ' + DBO.FN_IDADE(CPACIENTE.NASCIMENTO, GETDATE()) AS NAME, 
@@ -14,7 +17,7 @@ export default async function getPacients(barcode_search_string: string) {
       WHERE SITUACAO = 1
     `;
 
-    let request = pool.request();
+    const request = pool.request();
 
     // Check if input is a number or string
     if (/^\d+$/.test(barcode_search_string)) {
@@ -31,11 +34,13 @@ export default async function getPacients(barcode_search_string: string) {
 
     const result = await request.query(query);
 
-    const pacientes = result.recordset.map((row: any) => ({
-      id: row.ID,
-      name: row.NAME,
-      email: row.EMAIL,
+    const pacientes = result.recordset.map((row: paciente) => ({
+      ID: row.ID,
+      NAME: row.NAME,
+      EMAIL: row.EMAIL,
     }));
+
+    console.log(pacientes)
 
     return pacientes;
   } catch (error) {

@@ -23,6 +23,7 @@
   "dependencies": {
     "@auth/prisma-adapter": "^2.7.2",
     "@auth/typeorm-adapter": "^2.7.4",
+    "@eslint/js": "8",
     "@heroui/react": "^2.6.14",
     "@heroui/spinner": "^2.2.7",
     "@prisma/client": "^5.14.0",
@@ -59,19 +60,20 @@
     "@types/node": "^20.14.10",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
-    "@typescript-eslint/eslint-plugin": "^8.1.0",
-    "@typescript-eslint/parser": "^8.1.0",
-    "eslint": "^9.20.0",
+    "@typescript-eslint/eslint-plugin": "^8.24.1",
+    "@typescript-eslint/parser": "^8.24.1",
     "eslint-config-next": "^15.0.1",
+    "eslint-plugin-react": "^7.37.4",
+    "globals": "^15.15.0",
     "postcss": "^8.4.39",
     "prettier": "^3.3.2",
     "prettier-plugin-tailwindcss": "^0.6.5",
     "prisma": "^5.14.0",
     "tailwindcss": "^3.4.3",
-    "typescript": "^5.5.3"
+    "typescript": "^5.5.3",
+    "typescript-eslint": "^8.24.1"
   },
   "ct3aMetadata": {
     "initVersion": "7.38.1"
-  },
-  "packageManager": "npm@10.2.3"
+  }
 }

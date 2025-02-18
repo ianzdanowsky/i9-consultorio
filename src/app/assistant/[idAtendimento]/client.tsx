@@ -9,7 +9,7 @@ import { transcribeAudio } from "./actions";
 // import { getSession } from "next-auth/react";
 import { useRouter } from 'next/navigation'
 import { useSession } from "next-auth/react";
-import { PacientHistory } from "./interfaces";
+import { type PacientHistory } from "./interfaces";
 import { writeProntuarioToDatabase, updateAtendimentoDatabase } from "./actions";
 import { useToast } from "~/hooks/use-toast"
 import {Spinner} from "@heroui/spinner";
@@ -38,7 +38,7 @@ export default function AudioTranslationChat({ pacientHistory, idAtendimento }: 
   const atendimentoId = idAtendimento
   const pacientId = pacientHistory[0]?.PACIENTEID ?? "Não identificado"
   const pacientName = pacientHistory[0]?.NAME ?? "Não identificado"
-  const pacientCns = pacientHistory[0]?.CNS ?? "Não identificado"
+  // const pacientCns = pacientHistory[0]?.CNS ?? "Não identificado"
   const pacientEtapaId = pacientHistory[0]?.ETAPAID ?? "Não identificado"
 
 
@@ -74,10 +74,19 @@ export default function AudioTranslationChat({ pacientHistory, idAtendimento }: 
   const handleFinishClick = () => {
     try {
     // Escrever prontuario
-    writeProntuarioToDatabase(atendimentoId, pacientId, pacientName, transcription, pacientEtapaId)
+    writeProntuarioToDatabase(atendimentoId, pacientId, pacientName, transcription, pacientEtapaId).then(() => {
+      console.log("Prontuário escrito com sucesso!")
+    }).catch((error) => {
+      console.error(error)
+    }
+    )
     // Atualizar atendimetno
     const nowDatetime = new Date().toISOString()
-    updateAtendimentoDatabase(atendimentoId, nowDatetime, professionalId, transcription)
+    updateAtendimentoDatabase(atendimentoId, nowDatetime, professionalId, transcription).then(() => {
+      console.log("Atendimento atualizado com sucesso!")
+    }).catch((error) => {
+      console.error(error)
+    })
     //
     } catch (error) {
       console.log(error)

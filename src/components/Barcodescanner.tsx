@@ -9,7 +9,7 @@ interface BarcodeScannerProps {
 export function BarcodeScanner({ onResult, onClose }: BarcodeScannerProps) {
   const { ref } = useZxing({
     onDecodeResult(result) {
-      onResult(result['text'])
+      onResult(result.getText())
       console.log(result)
     },
   })

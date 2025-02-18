@@ -1,12 +1,8 @@
-import { PrismaAdapter } from "@auth/prisma-adapter";
-import NextAuth, { type DefaultSession, type NextAuthConfig } from "next-auth";
-import DiscordProvider from "next-auth/providers/discord";
+import { type DefaultSession, type NextAuthConfig } from "next-auth";
 import { TypeORMAdapter } from "@auth/typeorm-adapter"
 import {AppDataSourceOptions} from "~/server/data-source";
 import AppDataSource from "~/server/data-source";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { DataSource, type DataSourceOptions } from "typeorm";
-import App from "next/app";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -68,7 +64,9 @@ export const authOptions = {
         if (password !== account?.senha) {
           throw new Error("Invalid password");
         }
-
+        
+        console.log("User found: ", user);
+        
         const userId = user.id as string;
         const userName = user.nomecompleto as string;
         const userRole = user.nivel as string;

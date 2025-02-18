@@ -1,29 +1,29 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { SearchForm } from "~/components/SearchForm"
 import { UserList } from "~/components/UserList"
 import { BarcodeScanner } from "~/components/Barcodescanner"
-import { searchPacientes, getPacienteByBarcode, getAllPacientes, type Paciente } from "~/lib/matendimento"
 import getPacients from "./actions"
 import LogoutButton from "~/components/LogoutButton"
+import { type paciente } from "~/interfaces/pacientes"
 
 export default function Home() {
-  const [users, setUsers] = useState<Paciente[]>([])
+  // const [users, setUsers] = useState<Paciente[]>([])
   const [barcodeString, setBarcodeString] = useState("")
-  const [searchResults, setSearchResults] = useState<Paciente[]>([])
+  const [searchResults, setSearchResults] = useState<paciente[]>([])
   const [isScanning, setIsScanning] = useState(false)
-  const [isUserListVisible, setIsUserListVisible] = useState(false)
+  // const [isUserListVisible, setIsUserListVisible] = useState(false)
 
-  useEffect(() => {
-    void fetchAllUsers()
-  }, [])
+  // useEffect(() => {
+  //   void fetchAllUsers()
+  // }, [])
 
-  const fetchAllUsers = async () => {
-    const allUsers = await getAllPacientes()
-    setUsers(allUsers)
-    setIsUserListVisible(true)
-  }
+  // const fetchAllUsers = async () => {
+  //   const allUsers = await getAllPacientes()
+  //   // setUsers(allUsers)
+  //   setIsUserListVisible(true)
+  // }
 
   const handleSearch = async (query: string) => {
     console.log(query)
@@ -55,11 +55,9 @@ export default function Home() {
         </div>
 
         {/* User List */}
-        {isUserListVisible && (
           <div className="w-full">
             <UserList users={searchResults} />
           </div>
-        )}
 
         {/* Barcode Scanner */}
         {isScanning && <BarcodeScanner onResult={handleBarcodeResult} onClose={() => setIsScanning(false)} />}

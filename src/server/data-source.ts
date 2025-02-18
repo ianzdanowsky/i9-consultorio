@@ -1,10 +1,11 @@
+import App from "next/app";
 import "reflect-metadata";
 import { DataSource, type DataSourceOptions } from "typeorm";
 import * as entities from "~/lib/entities";
 
 export const AppDataSourceOptions: DataSourceOptions = {
     type: "mssql",
-    host: "192.168.1.8",
+    host: "10.0.0.83",
     port: 1433,
     username: "sa",
     password: "security",
@@ -22,13 +23,19 @@ export const AppDataSourceOptions: DataSourceOptions = {
 
 const AppDataSource = new DataSource(AppDataSourceOptions);
 
-// Force initialization before export
+// Force initialization to get user's table before export
+if (!AppDataSource.isInitialized) {
 AppDataSource.initialize()
+  .then(() => {
+    AppDataSource.getRepository("cusuario");
+    AppDataSource.getRepository("usuarioSenha");
+  })
   .then(() => {
     console.log("✅ Data Source has been initialized!");
   })
   .catch((err) => {
     console.error("❌ Error during Data Source initialization:", err);
   });
+}
 
 export default AppDataSource;

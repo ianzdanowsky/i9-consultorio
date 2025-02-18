@@ -3,6 +3,7 @@
 import { fetchFromWhisper } from "~/lib/whisper/whisper";
 import { fetchFromOllama } from "~/lib/ollama/ollama";
 import { connectDB } from "~/lib/db";
+import { type ConnectionPool } from "mssql";
 
 type Result = {
     text: string
@@ -31,7 +32,7 @@ export async function writeProntuarioToDatabase(ATENDIMENTOID: string, PACIENTEI
     ([dataref], [atendimentoid], [pacienteid], [pacientenome], [conteudo], [etapaid]) 
     VALUES ('${DATAATUAL}', '${ATENDIMENTOID}', '${PACIENTEID}', '${PACIENTENOME}', '${CONTEUDO}', '${ETAPAID}')`;
 
-    const pool = await connectDB()
+    const pool = await connectDB() as unknown as ConnectionPool
     const result = await pool.request().query(sqlQuery)
     console.log(result.rowsAffected)
 }
@@ -45,7 +46,7 @@ export async function updateAtendimentoDatabase(ATENDIMENTOID: string, DATA: str
         [diagnosticos] = '', 
         [procedimentos] = '' 
     WHERE matendimento.id = '${ATENDIMENTOID}'`;
-    const pool = await connectDB()
+    const pool = await connectDB() as unknown as ConnectionPool
     const result = await pool.request().query(sqlQuery)
     console.log(result.rowsAffected)
 }

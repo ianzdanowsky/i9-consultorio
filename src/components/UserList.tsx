@@ -1,10 +1,10 @@
-import type { Paciente } from "~/lib/matendimento"
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
 import { Button } from "~/components/ui/button"
 import { useRouter } from "next/navigation"
+import { paciente } from "~/interfaces/pacientes"
 
 interface UserListProps {
-  users: Paciente[]
+  users: paciente[]
 }
 
 export function UserList({ users }: UserListProps) {
@@ -16,14 +16,14 @@ export function UserList({ users }: UserListProps) {
         <p className="text-gray-500 text-center">Nenhum paciente encontrado.</p>
       ) : (
         users.map((user) => (
-          <Card key={user.id} className="p-4 border rounded-lg shadow-md">
+          <Card key={user.ID} className="p-4 border rounded-lg shadow-md">
             <CardHeader>
-              <CardTitle className="text-lg font-bold">{user.name}</CardTitle>
+              <CardTitle className="text-lg font-bold">{user.NAME}</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-700">Email: {user.email}</p>
+              <p className="text-gray-700">Email: {user.EMAIL}</p>
               <Button
-                onClick={() => router.push("/assistant/" + user.id)}
+                onClick={() => router.push("/assistant/" + user.ID)}
                 className="mt-2 bg-blue-500 hover:bg-blue-600 text-white w-full"
               >
                 Iniciar Atendimento
