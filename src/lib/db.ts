@@ -10,7 +10,7 @@ const dbconfig = {
     encrypt: false, // Usado para Azure, pode ser false para servidores locais
     trustServerCertificate: false,
   },
-} as config
+}
 
 export async function connectDB() {
   try {
