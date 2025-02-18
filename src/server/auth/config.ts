@@ -47,9 +47,9 @@ export const authOptions = {
       async authorize(credentials) {
 
         // Extract username and password from the credentials
-        const { username, password } = credentials as { username: string; password: string };
+        const { email, password } = credentials as { email: string; password: string };
         
-        console.log('Username: ', username);
+        console.log('Email: ', email);
         console.log('Password: ', password);
 
 
@@ -61,7 +61,7 @@ export const authOptions = {
         console.log('AccountRepo: ', accountRepo);
 
         // Find user by username 
-        const user = await userRepo.findOneBy({ email: username });
+        const user = await userRepo.findOneBy({ email: email });
         const account = await accountRepo.findOne({ where: { usuarioId: user?.id as string } });
 
         if (!user) {
