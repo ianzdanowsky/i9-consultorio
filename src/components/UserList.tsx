@@ -21,7 +21,7 @@ export function UserList({ users }: UserListProps) {
               <CardTitle className="text-lg font-bold">{user.NAME}</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-700">Email: {user.EMAIL}</p>
+              <p className="text-gray-700">CNS: {user.EMAIL}</p>
               <Button
                 onClick={() => router.push("/assistant/" + user.ID)}
                 className="mt-2 bg-blue-500 hover:bg-blue-600 text-white w-full"
