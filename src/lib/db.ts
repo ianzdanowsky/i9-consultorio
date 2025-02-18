@@ -6,10 +6,11 @@ const dbconfig = {
   server: process.env.DB_SERVER,
   database: process.env.DB_NAME,
   options: {
+    instanceName: process.env.DB_INSTANCE,
     encrypt: false, // Usado para Azure, pode ser false para servidores locais
     trustServerCertificate: false,
   },
-}
+} as config
 
 export async function connectDB() {
   try {

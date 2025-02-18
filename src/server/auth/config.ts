@@ -49,16 +49,16 @@ export const authOptions = {
         // Extract username and password from the credentials
         const { email, password } = credentials as { email: string; password: string };
         
-        console.log('Email: ', email);
-        console.log('Password: ', password);
+        // console.log('Email: ', email);
+        // console.log('Password: ', password);
 
 
         // Query database to find the user and password
         const userRepo = AppDataSource.getRepository("cusuario");
         const accountRepo = AppDataSource.getRepository("usuarioSenha");
 
-        console.log('UserRepo: ', userRepo);
-        console.log('AccountRepo: ', accountRepo);
+        // console.log('UserRepo: ', userRepo);
+        // console.log('AccountRepo: ', accountRepo);
 
         // Find user by username 
         const user = await userRepo.findOneBy({ email: email });
@@ -68,8 +68,8 @@ export const authOptions = {
           throw new Error("User not found");
         }
         
-        console.log('User: ', user);
-        console.log('Account: ', account);
+        // console.log('User: ', user);
+        // console.log('Account: ', account);
 
         // Validate password
         if (password !== account?.senha) {
