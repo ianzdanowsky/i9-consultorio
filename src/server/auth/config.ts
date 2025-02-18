@@ -49,10 +49,16 @@ export const authOptions = {
         // Extract username and password from the credentials
         const { username, password } = credentials as { username: string; password: string };
         
+        console.log('Username: ', username);
+        console.log('Password: ', password);
+
 
         // Query database to find the user and password
         const userRepo = AppDataSource.getRepository("cusuario");
         const accountRepo = AppDataSource.getRepository("usuarioSenha");
+
+        console.log('UserRepo: ', userRepo);
+        console.log('AccountRepo: ', accountRepo);
 
         // Find user by username 
         const user = await userRepo.findOneBy({ email: username });
