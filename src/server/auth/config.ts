@@ -98,6 +98,7 @@ export const authOptions = {
         id: token.id as string,
         nomecompleto: (token.nomecompleto as string) ?? "",
         role: (token.role as string) ?? "",
+        email: (token.email as string) ?? "",
       },
     }),
   },
