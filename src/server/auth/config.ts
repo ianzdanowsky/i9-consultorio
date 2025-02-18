@@ -59,7 +59,8 @@ export const authOptions = {
         if (!user) {
           throw new Error("User not found");
         }
-
+        
+        console.log('User: ', user);
         console.log('Account: ', account);
 
         // Validate password
