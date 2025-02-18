@@ -55,7 +55,7 @@ export const authOptions = {
         const accountRepo = AppDataSource.getRepository("usuarioSenha");
 
         // Find user by username 
-        const user = await userRepo.findOneBy({ email: username });
+        const user = await userRepo.findOneBy({ where: { email: username } });
         const account = await accountRepo.findOne({ where: { usuarioId: user?.id as string } });
 
         if (!user) {
