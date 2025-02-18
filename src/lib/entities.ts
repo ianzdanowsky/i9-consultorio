@@ -30,9 +30,6 @@
 
     @Column({ type: "varchar" })
     nomecompleto!: string
-
-    @Column({ type: "varchar" })
-    email!: string
   
     @OneToMany(() => SessionEntity, (session) => session.userId)
     sessions!: SessionEntity[]
