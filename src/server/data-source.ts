@@ -14,7 +14,7 @@ export const AppDataSourceOptions: DataSourceOptions = {
     synchronize: false,
     logging: true,
     options: {
-        instanceName: "mssql",   // Specify the named instance here
+        instanceName: process.env.DB_INSTANCE,   // Specify the named instance here
         encrypt: false,          // Disable encryption if not needed
         trustServerCertificate: true,  // Bypass SSL certificate errors
       },
