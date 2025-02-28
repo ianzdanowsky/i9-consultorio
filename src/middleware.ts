@@ -3,7 +3,8 @@ import { NextResponse, type NextRequest } from "next/server";
 
 export async function middleware(req: NextRequest) {
   // Get token from cookies (session) or Authorization header
-  const basePath = req.nextUrl.origin;
+
+  const basePath = process.env.AUTH_URL
 
   console.log(basePath)
 
