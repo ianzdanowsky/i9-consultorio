@@ -5,6 +5,8 @@ export async function middleware(req: NextRequest) {
   // Get token from cookies (session) or Authorization header
   const basePath = req.nextUrl.origin;
 
+  console.log(basePath)
+
   const token = await getToken({ req, secret: process.env.AUTH_SECRET });
 
   // If the user is NOT logged in and trying to access a protected page, redirect to /login
