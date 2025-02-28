@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card"
 import { Button } from "~/components/ui/button"
 import { useRouter } from "next/navigation"
-import { paciente } from "~/interfaces/pacientes"
+import { type paciente } from "~/interfaces/pacientes"
 
 interface UserListProps {
   users: paciente[]
@@ -23,8 +23,8 @@ export function UserList({ users }: UserListProps) {
             <CardContent>
               <p className="text-gray-700">CNS: {user.EMAIL}</p>
               <Button
-                onClick={() => router.push("/assistant/" + user.ID)}
-                className="mt-2 bg-blue-500 hover:bg-blue-600 text-white w-full"
+                onClick={() => router.push("/atendimento/" + user.ID)}
+                className="mt-2 text-white w-full"
               >
                 Iniciar Atendimento
               </Button>

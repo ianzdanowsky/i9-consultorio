@@ -1,7 +1,7 @@
 import { type DefaultSession, type NextAuthConfig } from "next-auth";
 import { TypeORMAdapter } from "@auth/typeorm-adapter"
-import {AppDataSourceOptions} from "~/server/data-source";
-import AppDataSource from "~/server/data-source";
+import {AppDataSourceOptions} from "~/server/auth/data-source";
+import AppDataSource from "~/server/auth/data-source";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 /**
@@ -36,12 +36,12 @@ export const authOptions = {
     strategy: "jwt",
   },
   // TODO: Remove debug
-  debug: true,
+  // debug: true,
   providers: [
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        username: { label: "Username", type: "text" },
+        email: { label: "Email", type: "text" },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
@@ -75,14 +75,18 @@ export const authOptions = {
         if (password !== account?.senha) {
           throw new Error("Invalid password");
         }
-        
-        console.log("User found: ", user);
-        
+                
         const userId = user.id as string;
         const userName = user.nomecompleto as string;
         const userRole = user.nivel as string;
+        const userEmail = user.email as string;
 
-        return { id: userId, nomecompleto: userName, role: userRole };
+        return { 
+          id: userId, 
+          nomecompleto: userName, 
+          role: userRole, 
+          email: userEmail
+        }; 
       },
     }),
   ],
@@ -106,6 +110,8 @@ export const authOptions = {
         role: (token.role as string) ?? "",
         email: token.email! ?? "",
       },
-    }),
+      
+    }
+  ),
   },
 } satisfies NextAuthConfig;

@@ -1,4 +1,4 @@
-import sql, { config } from "mssql"
+import sql, { type config } from "mssql"
 
 const dbconfig = {
   user: process.env.DB_USER,

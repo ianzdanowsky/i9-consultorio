@@ -1,21 +1,23 @@
-import { NextResponse } from 'next/server'
-import { type NextRequest } from 'next/server'
-// import { auth } from './server/auth/index'
- 
-// This function can be marked `async` if using `await` inside
-export async function middleware(request: NextRequest) {
-    const cookie = request.cookies.get('authjs.session-token')
-    console.log(cookie)
-    if (!cookie) {
-        return NextResponse.redirect(new URL('/login', request.url))
-    }
-    return NextResponse.next()
-}
-// export default auth((req: NextRequest) => {
-//     return NextResponse.redirect(new URL('/pesquisa', NextRequest.url))
-//   })
+import { getToken } from "next-auth/jwt";
+import { NextResponse, type NextRequest } from "next/server";
 
-// See "Matching Paths" below to learn more
+export async function middleware(req: NextRequest) {
+  // Get token from cookies (session) or Authorization header
+  const token = await getToken({ req, secret: process.env.AUTH_SECRET });
+
+  // If the user is NOT logged in and trying to access a protected page, redirect to /login
+  if (!token && req.nextUrl.pathname !== "/login") {
+    return NextResponse.redirect(new URL("/login", req.url));
+  }
+
+  if (req.nextUrl.pathname === "/" && token) {
+    return NextResponse.redirect(new URL("/pesquisa", req.url));
+  }
+
+  return NextResponse.next();
+}
+
+// 🔥 Optional: Define which routes require authentication
 export const config = {
-  matcher: ['/assistant', '/pesquisa', '/'],
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
 }

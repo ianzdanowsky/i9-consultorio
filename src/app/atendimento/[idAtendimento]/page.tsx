@@ -1,11 +1,14 @@
 import AudioTranslationChat from "./client";
-import { connectDB } from "~/lib/db";
+import { connectDB } from "~/lib/db/db";
 import { type PacientHistory } from "./interfaces";
 import { type ConnectionPool } from "mssql";
+import { auth } from "~/server/auth/index";
 
-export default async function AssistantPage(props: {
+export default async function AtendimentoPage(props: {
   params: Promise<{ idAtendimento: string }>;
 }) {
+  const session = await auth()
+
   const params = await props.params;
   const idAtendimento = params.idAtendimento;
 
@@ -22,6 +25,7 @@ export default async function AssistantPage(props: {
         <AudioTranslationChat
           pacientHistory={historyPatientsRecordset}
           idAtendimento={idAtendimento}
+          session={session}
         />
       </main>
     </div>

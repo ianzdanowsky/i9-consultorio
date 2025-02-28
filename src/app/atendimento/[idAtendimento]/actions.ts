@@ -2,7 +2,7 @@
 
 import { fetchFromWhisper } from "~/lib/whisper/whisper";
 import { fetchFromOllama } from "~/lib/ollama/ollama";
-import { connectDB } from "~/lib/db";
+import { connectDB } from "~/lib/db/db";
 import { type ConnectionPool } from "mssql";
 
 type Result = {

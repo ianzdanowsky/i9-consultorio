@@ -35,14 +35,6 @@ COPY . .
 ENV NODE_ENV production
 RUN yarn global add pnpm
 
-# ARG GETEDUCLASS_ENV=production
-# ENV GETEDUCLASS_ENV=$GETEDUCLASS_ENV
-
-# RUN if [ "$GETEDUCLASS_ENV" = "development" ]; then \
-#   cp .env.dev .env.production; \
-#   fi
-
-
 RUN pnpm build
 
 # Production image, copy all the files and run next
@@ -73,7 +65,5 @@ USER nextjs
 EXPOSE 3000
 
 ENV PORT 3000
-# # set hostname to localhost
-# ENV HOSTNAME "0.0.0.0"
 
 CMD HOSTNAME="0.0.0.0" node server.js

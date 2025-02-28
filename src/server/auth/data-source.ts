@@ -1,7 +1,5 @@
-import App from "next/app";
-import "reflect-metadata";
 import { DataSource, type DataSourceOptions } from "typeorm";
-import * as entities from "~/lib/entities";
+import * as entities from "~/server/auth/entities";
 
 export const AppDataSourceOptions: DataSourceOptions = {
     type: "mssql",
@@ -12,14 +10,13 @@ export const AppDataSourceOptions: DataSourceOptions = {
     database: process.env.DB_NAME,
     entities: entities,
     synchronize: false,
-    logging: true,
+    logging: false,
     options: {
         instanceName: process.env.DB_INSTANCE,   // Specify the named instance here
         encrypt: false,          // Disable encryption if not needed
         trustServerCertificate: true,  // Bypass SSL certificate errors
       },
 };
-
 
 const AppDataSource = new DataSource(AppDataSourceOptions);
 

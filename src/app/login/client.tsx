@@ -1,47 +1,62 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { signIn } from "next-auth/react" 
-import { Button } from "~/components/ui/button"
-import { Input } from "~/components/ui/input"
-import { Label } from "~/components/ui/label"
-import { CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "~/components/ui/card"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
+import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
+import {
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  CardFooter,
+} from "~/components/ui/card";
+import Lottie from "lottie-react";
+import soundLines from "~/components/animations/lottie/sound-lines.json";
 
 export default function LoginPageClient() {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [error, setError] = useState("")
-  const router = useRouter()
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError("")
+    e.preventDefault();
+    setError("");
 
     const result = await signIn("credentials", {
       email: email,
       password: password,
       redirect: false, // Impede a redireção automática para tratamento de erro
-    })
-
-    console.log(result)
+    });
 
     if (result?.error) {
-      setError("Usuário ou senha inválidos")
+      setError("Usuário ou senha inválidos");
     } else {
       // Redireciona para a página de pesquisa após login bem-sucedido
-      router.push("/pesquisa")
+      router.push("/pesquisa");
     }
-  }
+  };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
-      <main className="flex flex-col flex-1 max-w-md mx-auto bg-white shadow-md rounded-lg p-6 w-full">
-        
+    <div className="flex min-h-screen items-center justify-center bg-gray-100 p-4">
+      <main className="mx-auto flex w-full max-w-md flex-1 flex-col rounded-lg bg-white p-6 shadow-md">
         {/* Header */}
-        <CardHeader>
-          <CardTitle className="text-2xl font-bold text-center">i9 Atendimento por voz</CardTitle>
-          <CardDescription className="text-center">Entre com suas credenciais para acessar sua conta</CardDescription>
+        <CardHeader className="flex flex-col items-center justify-center gap-1 text-center">
+          <div className="-mb-2 flex justify-center">
+            <Lottie
+              animationData={soundLines}
+              style={{ width: 100, height: 100 }}
+            />
+          </div>
+          <CardTitle className="text-2xl font-bold">
+            i9 Atendimento por voz
+          </CardTitle>
+          <CardDescription>
+            Entre com suas credenciais para acessar sua conta
+          </CardDescription>
         </CardHeader>
 
         {/* Formulário de Login */}
@@ -69,8 +84,11 @@ export default function LoginPageClient() {
                 required
               />
             </div>
-            {error && <p className="text-red-500 text-sm">{error}</p>}
-            <Button type="submit" className="w-full bg-blue-500 hover:bg-blue-600 text-white">
+            {error && <p className="text-sm text-red-500">{error}</p>}
+            <Button
+              type="submit"
+              className="w-full text-white"
+            >
               Entrar
             </Button>
           </form>
@@ -87,5 +105,5 @@ export default function LoginPageClient() {
         </CardFooter>
       </main>
     </div>
-  )
+  );
 }

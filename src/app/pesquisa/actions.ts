@@ -1,11 +1,11 @@
 "use server"
 
 import { type ConnectionPool } from "mssql";
-import { connectDB } from "~/lib/db"
+import { connectDB } from "~/lib/db/db"
 import { type paciente } from "~/interfaces/pacientes";
 
 
-export default async function getPacients(barcode_search_string: string) {
+export default async function getPacients(search_string: string) {
   try {
     const pool = await connectDB() as unknown as ConnectionPool;
     let query = `
@@ -20,14 +20,14 @@ export default async function getPacients(barcode_search_string: string) {
     const request = pool.request();
 
     // Check if input is a number or string
-    if (/^\d+$/.test(barcode_search_string)) {
+    if (/^\d+$/.test(search_string)) {
       // If it's a number, search by ID
       query += ` AND MATENDIMENTO.ID = @ID`;
-      request.input("ID", barcode_search_string);
-    } else if (barcode_search_string.trim()) {
+      request.input("ID", search_string);
+    } else if (search_string.trim()) {
       // If it's a string, search by name
       query += ` AND CPACIENTE.NOME LIKE @NAME`;
-      request.input("NAME", `%${barcode_search_string}%`); // Use LIKE for partial search
+      request.input("NAME", `%${search_string}%`); // Use LIKE for partial search
     }
 
     query += " ORDER BY DATAHORAAGENDA DESC";
@@ -39,8 +39,6 @@ export default async function getPacients(barcode_search_string: string) {
       NAME: row.NAME,
       EMAIL: row.EMAIL,
     }));
-
-    console.log(pacientes)
 
     return pacientes;
   } catch (error) {
