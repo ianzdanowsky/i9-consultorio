@@ -10,8 +10,11 @@ export async function middleware(req: NextRequest) {
 
   const token = await getToken({ req, secret: process.env.AUTH_SECRET });
 
-  console.log("Token: ", token)
-
+  if (!token) {
+    console.error("Failed to retrieve token in production");
+    console.log("Headers: ", req.headers.get("authorization"));
+    console.log("Cookies: ", req.cookies);
+  }
   // If the user is NOT logged in and trying to access a protected page, redirect to /login
   if (!token && req.nextUrl.pathname !== "/login") {
     console.log("Pathname: ", req.nextUrl.pathname)
