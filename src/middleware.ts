@@ -12,10 +12,12 @@ export async function middleware(req: NextRequest) {
 
   // If the user is NOT logged in and trying to access a protected page, redirect to /login
   if (!token && req.nextUrl.pathname !== "/login") {
+    console.log("Redirecting to login")
     return NextResponse.redirect(basePath + "/login");
   }
 
   if (req.nextUrl.pathname === "/" && token) {
+    console.log("Redirecting to pesquisa")
     return NextResponse.redirect(basePath + "/pesquisa");
   }
 
