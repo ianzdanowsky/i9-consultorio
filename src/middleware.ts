@@ -6,12 +6,15 @@ export async function middleware(req: NextRequest) {
 
   const basePath = process.env.AUTH_URL
 
-  console.log(basePath)
+  console.log("Base Path :", basePath)
 
   const token = await getToken({ req, secret: process.env.AUTH_SECRET });
 
+  console.log("Token: ", token)
+
   // If the user is NOT logged in and trying to access a protected page, redirect to /login
   if (!token && req.nextUrl.pathname !== "/login") {
+    console.log("Pathname: ", req.nextUrl.pathname)
     console.log("Redirecting to login")
     return NextResponse.redirect(basePath + "/login");
   }
