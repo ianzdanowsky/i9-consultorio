@@ -3,12 +3,12 @@ import { NextResponse, type NextRequest } from "next/server";
 
 export async function middleware(req: NextRequest) {
   // Get token from cookies (session) or Authorization header
-  // const token = await getToken({ req, secret: process.env.AUTH_SECRET });
+  const token = await getToken({ req, secret: process.env.AUTH_SECRET });
 
-  // // If the user is NOT logged in and trying to access a protected page, redirect to /login
-  // if (!token && req.nextUrl.pathname !== "/login") {
-  //   return NextResponse.redirect(new URL("/login", req.url));
-  // }
+  // If the user is NOT logged in and trying to access a protected page, redirect to /login
+  if (!token && req.nextUrl.pathname !== "/login") {
+    return NextResponse.redirect(new URL("/login", req.url));
+  }
 
   // if (req.nextUrl.pathname === "/" && token) {
   //   return NextResponse.redirect(new URL("/pesquisa", req.url));
