@@ -18,21 +18,21 @@ export const AppDataSourceOptions: DataSourceOptions = {
       },
 };
 
-// const AppDataSource = new DataSource(AppDataSourceOptions);
+const AppDataSource = new DataSource(AppDataSourceOptions);
 
-// // Force initialization to get user's table before export
-// if (!AppDataSource.isInitialized) {
-// AppDataSource.initialize()
-//   .then(() => {
-//     AppDataSource.getRepository("cusuario");
-//     AppDataSource.getRepository("usuarioSenha");
-//   })
-//   .then(() => {
-//     console.log("✅ Data Source has been initialized!");
-//   })
-//   .catch((err) => {
-//     console.error("❌ Error during Data Source initialization:", err);
-//   });
-// }
+// Force initialization to get user's table before export
+if (!AppDataSource.isInitialized) {
+AppDataSource.initialize()
+  .then(() => {
+    AppDataSource.getRepository("cusuario");
+    AppDataSource.getRepository("usuarioSenha");
+  })
+  .then(() => {
+    console.log("✅ Data Source has been initialized!");
+  })
+  .catch((err) => {
+    console.error("❌ Error during Data Source initialization:", err);
+  });
+}
 
-// export default AppDataSource;
+export default AppDataSource;
