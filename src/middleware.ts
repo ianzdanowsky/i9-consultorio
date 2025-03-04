@@ -1,30 +1,38 @@
-import { getToken } from "next-auth/jwt";
+import { getToken, type GetTokenParams } from "next-auth/jwt";
 import { NextResponse, type NextRequest } from "next/server";
 
 export async function middleware(req: NextRequest) {
-  const basePath = process.env.AUTH_URL ?? "";
+  // Get token from cookies (session) or Authorization header
 
-  console.log("🔍 Base Path:", basePath);
-  console.log("🔍 Incoming Cookies:", req.cookies.getAll());
-  console.log("🔍 Authorization Header:", req.headers.get("authorization"));
+  const basePath = process.env.AUTH_URL
 
-  const token = await getToken({
-    req,
-    secret: process.env.AUTH_SECRET,
-  });
+  console.log("Base Path :", basePath)
+
+  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
 
   if (!token) {
-    console.warn("❌ No token found!");
+    console.log('Token ', token)
+    console.error("Failed to retrieve token in production");
+    console.log("Headers: ", req.headers.get("authorization"));
+    console.log("Cookies: ", req.cookies);
+  }
+
+  // If the user is NOT logged in and trying to access a protected page, redirect to /login
+  if (!token && req.nextUrl.pathname !== "/login") {
+    console.log("Pathname: ", req.nextUrl.pathname)
+    console.log("Redirecting to login")
     return NextResponse.redirect(basePath + "/login");
   }
 
-  if (req.nextUrl.pathname === "/") {
+  if (req.nextUrl.pathname === "/" && token) {
+    console.log("Redirecting to pesquisa")
     return NextResponse.redirect(basePath + "/pesquisa");
   }
 
   return NextResponse.next();
 }
 
+// 🔥 Optional: Define which routes require authentication
 export const config = {
   matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
-};
+}
