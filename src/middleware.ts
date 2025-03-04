@@ -8,7 +8,7 @@ export async function middleware(req: NextRequest) {
 
   const basePath = process.env.AUTH_URL
 
-  const userCookies = req.cookies
+  const userCookies = req.cookies.get('__Secure-authjs.session-token')
   console.log(userCookies)
 
   if (!cookies) {
