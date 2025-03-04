@@ -1,5 +1,6 @@
 import { getToken, type GetTokenParams } from "next-auth/jwt";
 import { NextResponse, type NextRequest } from "next/server";
+import { auth } from "./server/auth";
 
 export async function middleware(req: NextRequest) {
   // Get token from cookies (session) or Authorization header
@@ -8,7 +9,7 @@ export async function middleware(req: NextRequest) {
 
   console.log("Base Path :", basePath)
 
-  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+  const token = await getToken({ req, secret: "HppW0yps0khmgwLN2vB7PgKrrESGQaUua5r1TaYF4Fk=" });
 
   if (!token) {
     console.log('Token ', token)
