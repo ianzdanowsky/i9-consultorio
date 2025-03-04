@@ -1,8 +1,9 @@
 import { type DefaultSession, type NextAuthConfig } from "next-auth";
 import { TypeORMAdapter } from "@auth/typeorm-adapter"
 import {AppDataSourceOptions} from "~/server/auth/data-source";
-import AppDataSource from "~/server/auth/data-source";
+// import AppDataSource from "~/server/auth/data-source";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { DataSource } from "typeorm";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -52,6 +53,7 @@ export const authOptions = {
         // console.log('Email: ', email);
         // console.log('Password: ', password);
 
+        const AppDataSource = new DataSource(AppDataSourceOptions);
 
         // Query database to find the user and password
         const userRepo = AppDataSource.getRepository("cusuario");
@@ -93,6 +95,10 @@ export const authOptions = {
 
 
   callbacks: {
+    authorized: async ({ auth }) => {
+      // Logged in users are authenticated, otherwise redirect to login page
+      return !!auth
+    },
     jwt: ({ token, user }) => {
       if (user) {
         token.id = user.id;
