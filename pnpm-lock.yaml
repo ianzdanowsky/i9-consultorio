@@ -62,6 +62,9 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
+      crypt-js:
+        specifier: ^1.0.4
+        version: 1.0.4
       framer-motion:
         specifier: ^12.4.2
         version: 12.4.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -2587,6 +2590,9 @@ packages:
   cross-spawn@7.0.6:
     resolution: {integrity: sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA==}
     engines: {node: '>= 8'}
+
+  crypt-js@1.0.4:
+    resolution: {integrity: sha512-9O9EEoVvr5aUf0bYHNAx8iX5ADgpep2EzZK8kJn1TRStgPMFpnET36pt9Jbhwpt1OnwNwXksyKmTkeZv1QLXzg==}
 
   cssesc@3.0.0:
     resolution: {integrity: sha512-/Tb/JcjK111nNScGob5MNtsntNM1aCNUDipB/TkwZFhyDrrE47SOx/18wF2bbjgc3ZzCSKW1T5nt5EbFoAz/Vg==}
@@ -7777,6 +7783,8 @@ snapshots:
       path-key: 3.1.1
       shebang-command: 2.0.0
       which: 2.0.2
+
+  crypt-js@1.0.4: {}
 
   cssesc@3.0.0: {}
 
