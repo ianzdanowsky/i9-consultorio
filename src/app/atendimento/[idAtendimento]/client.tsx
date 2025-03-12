@@ -65,6 +65,24 @@ export default function AudioTranslationChat({
   // const pacientCns = pacientHistory[0]?.CNS ?? "Não identificado"
   const pacientEtapaId = pacientHistory[0]?.ETAPAID ?? "Não identificado";
 
+  const handleMicClickAppend = async () => {
+    if (!isRecording) {
+      await startRecording();
+    } else {
+      console.log("Appending transcription...");
+      const newRecording = await stopRecording();
+      setRecordings({
+        audioUrls: [...recordings.audioUrls, newRecording.audioURL],
+        audioBlobs: [...recordings.audioBlobs, newRecording.audioBlob],
+      });
+      setIsTranscribing(true);
+      const transcribedAudio = await transcribeAudio(newRecording.wavBlob);
+      setTranscription(transcription + "\n" + transcribedAudio);
+      setIsTranscribing(false);
+      setEditedText(transcription + "\n" + transcribedAudio);
+    }
+  };
+
   const handleMicClick = async () => {
     if (!isRecording) {
       await startRecording();
@@ -100,6 +118,7 @@ export default function AudioTranslationChat({
         pacientName,
         transcription,
         pacientEtapaId,
+        professionalId,
       )
         .then(() => {
           console.log("Prontuário escrito com sucesso!");
@@ -148,17 +167,17 @@ export default function AudioTranslationChat({
   };
 
   return (
-<div className="flex flex-col min-h-screen bg-gray-100">
-<main className="mx-auto flex w-full max-w-lg flex-1 flex-col rounded-lg bg-white p-4 shadow-md min-h-screen flex-grow overflow-hidden">
-<div className="mb-4 flex flex-col items-center space-y-3">
-  <Button
-    onClick={() => router.push("/pesquisa")}
-    className="w-full border py-3 px-6 rounded-lg flex items-center justify-center"
-  >
-    Voltar
-  </Button>
-  <UserProfileButton session={session} />
-</div>
+    <div className="flex min-h-screen flex-col bg-gray-100">
+      <main className="mx-auto flex min-h-screen w-full max-w-lg flex-1 flex-grow flex-col overflow-hidden rounded-lg bg-white p-4 shadow-md">
+        <div className="mb-4 flex flex-col items-center space-y-3">
+          <Button
+            onClick={() => router.push("/pesquisa")}
+            className="flex w-full items-center justify-center rounded-lg border px-6 py-3"
+          >
+            Voltar
+          </Button>
+          <UserProfileButton session={session} />
+        </div>
 
         {/* Header - Patient Information */}
         <div className="mb-4 rounded-lg border border-gray-300 bg-gray-100 p-3 shadow-sm">
@@ -170,7 +189,7 @@ export default function AudioTranslationChat({
 
         {/* Transcription Section */}
         <div className="flex-1 overflow-y-auto border-b pb-4">
-        <h2 className="mb-2 text-lg font-semibold">
+          <h2 className="mb-2 text-lg font-semibold">
             Transcrição do atendimento
           </h2>
 
@@ -217,6 +236,16 @@ export default function AudioTranslationChat({
                     <Edit className="h-5 w-5" />
                   )}
                   {editing ? "Salvar edição" : "Editar"}
+                </Button>
+              )}
+
+              {transcription && (
+                <Button
+                  onClick={handleMicClickAppend}
+                  className="mt-2 flex items-center gap-2 text-white"
+                >
+                  <Mic className="h-5 w-5" />
+                  {isRecording ? "Interromper" : "Adicionar transcrição"}
                 </Button>
               )}
             </>

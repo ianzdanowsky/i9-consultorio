@@ -26,11 +26,11 @@ export async function generateText(prompt: string): Promise<string> {
     return text
 }
 
-export async function writeProntuarioToDatabase(ATENDIMENTOID: string, PACIENTEID: string, PACIENTENOME: string, CONTEUDO: string, ETAPAID: string) {
+export async function writeProntuarioToDatabase(ATENDIMENTOID: string, PACIENTEID: string, PACIENTENOME: string, CONTEUDO: string, ETAPAID: string, PROFISSIONALID: string) {
     const DATAATUAL = new Date().toISOString().slice(0, 19).replace('T', ' ');
     const sqlQuery = `INSERT INTO [i9dados].[dbo].[mprontuario] 
-    ([dataref], [atendimentoid], [pacienteid], [pacientenome], [conteudo], [etapaid]) 
-    VALUES ('${DATAATUAL}', '${ATENDIMENTOID}', '${PACIENTEID}', '${PACIENTENOME}', '${CONTEUDO}', '${ETAPAID}')`;
+    ([dataref], [atendimentoid], [pacienteid], [pacientenome], [conteudo], [etapaid], [profissionalcodigo]) 
+    VALUES ('${DATAATUAL}', '${ATENDIMENTOID}', '${PACIENTEID}', '${PACIENTENOME}', '${CONTEUDO}', '${ETAPAID}', '${PROFISSIONALID}')`;
 
     const pool = await connectDB() as unknown as ConnectionPool
     const result = await pool.request().query(sqlQuery)
@@ -44,7 +44,9 @@ export async function updateAtendimentoDatabase(ATENDIMENTOID: string, DATA: str
         [profissionalid] = '${PROFISSIONALID}', 
         [atendimento] = '${ATENDIMENTO}', 
         [diagnosticos] = '', 
-        [procedimentos] = '' 
+        [procedimentos] = '',
+        [situacao] = 2
+
     WHERE matendimento.id = '${ATENDIMENTOID}'`;
     const pool = await connectDB() as unknown as ConnectionPool
     const result = await pool.request().query(sqlQuery)

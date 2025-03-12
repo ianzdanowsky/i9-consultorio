@@ -7,8 +7,14 @@ export async function middleware(req: NextRequest) {
   // Get token from cookies (session) or Authorization header
 
   const basePath = process.env.AUTH_URL
+  
+  const userSecureCookies = req.cookies.get('__Secure-authjs.session-token')
+  const userCookies = req.cookies.get('authjs.session-token')
+  let isCookie = false
 
-  const userCookies = req.cookies.get('__Secure-authjs.session-token')
+  if (userSecureCookies  || userCookies) {
+    isCookie = true
+  }
   console.log(userCookies)
 
   if (!cookies) {
@@ -18,13 +24,13 @@ export async function middleware(req: NextRequest) {
   }
   
   // If the user is NOT logged in and trying to access a protected page, redirect to /login
-  if (!userCookies && req.nextUrl.pathname !== "/login") {
+  if (!isCookie && req.nextUrl.pathname !== "/login") {
     console.log("Pathname: ", req.nextUrl.pathname)
     console.log("Redirecting to login")
     return NextResponse.redirect(basePath + "/login");
   }
 
-  if (req.nextUrl.pathname === "/" && userCookies) {
+  if (req.nextUrl.pathname === "/" && isCookie) {
     console.log("Redirecting to pesquisa")
     return NextResponse.redirect(basePath + "/pesquisa");
   }
