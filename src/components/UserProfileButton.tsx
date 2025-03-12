@@ -19,7 +19,7 @@ interface UserProfileProps {
   const user = {
     name: session?.user.nomecompleto,
     email: session?.user.email,
-    avatar: "https://github.com/shadcn.png",
+    avatar: "",
     role: session?.user.role,
   }
 
