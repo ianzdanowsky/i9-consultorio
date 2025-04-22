@@ -14,6 +14,7 @@ declare module "next-auth" {
   interface Session extends DefaultSession {
     user: {
       id: string;
+      profissionalId?: string;
       role: string;
       nomecompleto: string;
       email: string | null;
@@ -24,6 +25,7 @@ declare module "next-auth" {
   interface User {
     // ...other properties
     id?: string;
+    profissionalId?: string;
     role?: string;
     nomecompleto?: string;
     email?: string | null;
@@ -51,31 +53,29 @@ export const authOptions = {
         // Extract username and password from the credentials
         const { email, password } = credentials as { email: string; password: string };
         
-        // console.log('Email: ', email);
-        // console.log('Password: ', password);
 
-        // const AppDataSource = new DataSource(AppDataSourceOptions);
-
-        // Query database to find the user and password
+        // Query database to find the user and passtword
         const userRepo = AppDataSource.getRepository("cusuario");
         const accountRepo = AppDataSource.getRepository("usuarioSenha");
-
-        // console.log('UserRepo: ', userRepo);
-        // console.log('AccountRepo: ', accountRepo);
+        const userProfessinalRepo = AppDataSource.getRepository("mprofissionalusuario");
 
         // Find user by username 
         const user = await userRepo.findOneBy({ email: email });
+
+        const profissional = await userProfessinalRepo.query(`
+          SELECT * FROM mprofissionalusuario WHERE usuarioid = '${user?.id}'
+        `);
+
         const account = await accountRepo.findOne({
           where: { usuarioId: user?.id as string },
           order: { id: "DESC" }, // Ordena do maior para o menor
         });
 
+
         if (!user) {
           throw new Error("User not found");
         }
         
-        // console.log('User: ', user);
-        // console.log('Account: ', account);
 
         //Inicio da validacao da senha
         //Metodo para criptografar a senha digitada na tela
@@ -91,14 +91,7 @@ export const authOptions = {
         //Chamada para criptografar a senha
         const i_key = createKey(password);
        
-        //console.log('Senha do banco ?', account?.senha);
-        //console.log('Senha da tela ?', password);        
-        //console.log('senha da tela convertida ?', i_key);
-
-        console.log('User: ', user);
-        //console.log('Account: ', account);        
         
-        // Modificao do if para confrontar as senhas do banco de dados com a digitada
         // Validate password
         if (i_key !== account?.senha) {
         //if (password !== account?.senha) {
@@ -106,8 +99,9 @@ export const authOptions = {
         }
 
         //Fim da validacao da senha     
-                
+  
         const userId = user.id as string;
+        const userProfissionalId = profissional[0]?.profissionalid as string;
         const userName = user.nomecompleto as string;
         const userRole = user.nivel as string;
         const userEmail = user.email as string;
@@ -115,6 +109,7 @@ export const authOptions = {
 
         return { 
           id: userId, 
+          profissionalId: userProfissionalId,
           nomecompleto: userName, 
           role: userRole, 
           email: userEmail,
@@ -133,6 +128,7 @@ export const authOptions = {
     jwt: ({ token, user }) => {
       if (user) {
         token.id = user.id;
+        token.profissionalId = user.profissionalId ?? "";
         token.nomecompleto = user.nomecompleto ?? "";
         token.tipoimagem = user.tipoimagem ?? "";
         token.role = user.role ?? "";
@@ -144,6 +140,7 @@ export const authOptions = {
       user: {
         ...session.user,
         id: token.id as string,
+        profissionalId: token.profissionalId as string,
         nomecompleto: (token.nomecompleto as string) ?? "",
         tipoimagem: (token.tipoimagem as string) ?? "",
         role: (token.role as string) ?? "",

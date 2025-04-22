@@ -54,7 +54,7 @@ export default function SignatureCapture() {
   const startCamera = async () => {
     try {
       const mediaStream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: "user" },
+        video: { facingMode: "environment" },
       })
       setStream(mediaStream)
 

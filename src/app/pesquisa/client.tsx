@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { SearchForm } from "~/components/SearchForm"
 import { UserList } from "~/components/UserList"
 import { BarcodeScanner } from "~/components/Barcodescanner"
@@ -15,6 +15,12 @@ export default function PesquisaClient({ session }:{session: Session | null}) {
   const [isScanning, setIsScanning] = useState(false)
 
   // const session = useSession()
+
+  useEffect(() => {
+    if (session?.user.profissionalId?.length === 0) {
+      window.location.href = "/assinatura"
+    }
+})
 
   const handleSearch = async (query: string) => {
     const results = await getPacients(query)

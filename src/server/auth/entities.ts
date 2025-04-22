@@ -40,6 +40,9 @@
     // Stores the user's password and other sensitive information
     @OneToOne(() => AccountEntity, (account) => account.usuarioId)
     accounts!: AccountEntity[]
+    
+    @OneToMany(() => UserProfissionalEntity, (userProfissional) => userProfissional.usuarioid)
+    userProfissional!: UserProfissionalEntity[]
   }
   
   @Entity({ name: "usuarioSenha" })
@@ -62,6 +65,22 @@
     user!: UserEntity
   }
   
+
+  @Entity({ name: "mprofissionalusuario" })
+  export class UserProfissionalEntity {
+    @PrimaryGeneratedColumn()
+    id!: number
+  
+    @Column({ type: "varchar" })
+    usuarioid!: string
+  
+    @Column({ type: "varchar" })
+    profissionalid!: string
+  
+    @ManyToOne(() => UserEntity, (user) => user.id)
+    user!: UserEntity
+  }
+
   @Entity({ name: "sessions" })
   export class SessionEntity {
     @PrimaryGeneratedColumn("uuid")
