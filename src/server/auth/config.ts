@@ -4,6 +4,7 @@ import {AppDataSourceOptions} from "~/server/auth/data-source";
 import AppDataSource from "~/server/auth/data-source";
 import CredentialsProvider from "next-auth/providers/credentials";
 import crypto from 'crypto';
+import type { ObjectLiteral } from "typeorm";
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
  * object and keep type safety.
@@ -64,7 +65,7 @@ export const authOptions = {
 
         const profissional = await userProfessinalRepo.query(`
           SELECT * FROM mprofissionalusuario WHERE usuarioid = '${user?.id}'
-        `);
+        `) as ObjectLiteral[];
 
         const account = await accountRepo.findOne({
           where: { usuarioId: user?.id as string },
