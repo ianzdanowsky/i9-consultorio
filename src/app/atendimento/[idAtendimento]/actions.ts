@@ -28,7 +28,7 @@ export async function generateText(prompt: string): Promise<string> {
 
 export async function writeProntuarioToDatabase(ATENDIMENTOID: string, PACIENTEID: string, PACIENTENOME: string, CONTEUDO: string, ETAPAID: string, PROFISSIONALID: string) {
     const DATAATUAL = new Date().toISOString().slice(0, 19).replace('T', ' ');
-    const sqlQuery = `INSERT INTO [i9dados].[dbo].[mprontuario] 
+    const sqlQuery = `INSERT INTO [mprontuario] 
     ([dataref], [atendimentoid], [pacienteid], [pacientenome], [conteudo], [etapaid], [profissionalcodigo]) 
     VALUES ('${DATAATUAL}', '${ATENDIMENTOID}', '${PACIENTEID}', '${PACIENTENOME}', '${CONTEUDO}', '${ETAPAID}', '${PROFISSIONALID}')`;
 
